@@ -1,0 +1,2 @@
+在nettypush-core路径在gradle build后的jar包通过java -jar 方式启动，可以直接作为桥接jar包
+nettypush-ext gradle build后生成的core包不能启动，因为Application被覆盖了

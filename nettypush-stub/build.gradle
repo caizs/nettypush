@@ -1,0 +1,17 @@
+dependencies {
+    compile project(":nettypush-core")
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
+    compile("org.springframework.data:spring-data-redis:1.8.6.RELEASE")
+
+    compile("com.alibaba:druid:1.1.2")
+
+    configurations.all {
+        exclude group: "commons-logging", module: "commons-logging"
+        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
+        exclude group: 'log4j', module: 'log4j'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}

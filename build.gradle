@@ -1,0 +1,91 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+    }
+    repositories {
+       // maven { url "${nexusUrl}/content/groups/public" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: "eclipse-wtp"
+    apply plugin: "idea"
+
+    group "com.lianfan.nettypush"
+    version "${projectVersion}"
+
+    repositories {
+       // maven { url "${nexusUrl}/content/groups/public" }
+        mavenCentral()
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'maven-publish'
+
+    dependencies {
+        compile('org.springframework.boot:spring-boot-starter')
+        testCompile('org.springframework.boot:spring-boot-starter-test')
+    }
+
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+
+    sourceSets {
+        main.java.srcDirs = ['src/main/java']
+        main.resources.srcDirs = ['src/main/resources', 'src/main/java']
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier "sources"
+    }
+
+    if (it.name == "nettypush-core") {
+        publishing {
+            publications {
+                maven(MavenPublication) {
+                    from components.java
+                    artifact sourceJar
+                }
+            }
+
+            repositories {
+                maven {
+                    credentials {
+                        username = "${nexusUsername}"
+                        password = "${nexusPassword}"
+                    }
+
+                    if (project.version.endsWith('-SNAPSHOT')) {
+                        url "${nexusUrl}/content/repositories/snapshots"
+                    } else {
+                        url "${nexusUrl}/content/repositories/releases"
+                    }
+                }
+            }
+        }
+    }
+
+}
+

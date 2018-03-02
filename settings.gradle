@@ -1,0 +1,5 @@
+rootProject.name = 'nettypush'
+
+include 'nettypush-core'
+include 'nettypush-stub'
+include 'nettypush-test'
