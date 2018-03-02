@@ -3,7 +3,6 @@ buildscript {
         springBootVersion = '1.5.9.RELEASE'
     }
     repositories {
-       // maven { url "${nexusUrl}/content/groups/public" }
         mavenCentral()
     }
     dependencies {
@@ -20,7 +19,6 @@ allprojects {
     version "${projectVersion}"
 
     repositories {
-       // maven { url "${nexusUrl}/content/groups/public" }
         mavenCentral()
     }
 
@@ -61,31 +59,7 @@ subprojects {
         classifier "sources"
     }
 
-    if (it.name == "nettypush-core") {
-        publishing {
-            publications {
-                maven(MavenPublication) {
-                    from components.java
-                    artifact sourceJar
-                }
-            }
-
-            repositories {
-                maven {
-                    credentials {
-                        username = "${nexusUsername}"
-                        password = "${nexusPassword}"
-                    }
-
-                    if (project.version.endsWith('-SNAPSHOT')) {
-                        url "${nexusUrl}/content/repositories/snapshots"
-                    } else {
-                        url "${nexusUrl}/content/repositories/releases"
-                    }
-                }
-            }
-        }
-    }
+  
 
 }
 
